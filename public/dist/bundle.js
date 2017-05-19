@@ -10373,14 +10373,14 @@ var MatchResult = function (_Component) {
                   _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
+                    _react2.default.createElement('input', { type: 'number', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
                         _this2.score1 = node;
                       } })
                   ),
                   _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
+                    _react2.default.createElement('input', { type: 'number', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
                         _this2.score2 = node;
                       } })
                   )
