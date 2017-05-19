@@ -1,33 +1,36 @@
 const rules = require('./game-rules');
-const dbClient = require('mongodb');
+const MongoClient = require('mongodb').MongoClient;
 
 const DB_CONNECTION_STRING = 'mongodb://localhost:27017/test';
 
+let db;
+
+const init = () => {
+  MongoClient.connect(DB_CONNECTION_STRING, function (err, database) {
+    if (err)
+      throw err;
+
+    db = database;
+  });
+}
+
 const getPlayers = () => {
-  let promise = dbClient.connect(DB_CONNECTION_STRING)
-    .then(function (db) {
-      let docs = db.collection('players').find({}).sort({ points: -1 }).toArray();
-      db.close();
-      return docs;
-    }).then(function (docs) {
+  return db.collection('players').find({}).sort({ points: -1 }).toArray()
+    .then(function (docs) {
       rules.setRankingAndCoef(docs);
       return docs;
     }).catch(function (error) {
       throw error;
     });
-  return promise;
 }
 
 const addScore = function (obj) {
-  let promise = getPlayers()
+  return getPlayers()
     .then((players) => {
-      return findMatchPlayers(players, obj);
-    }).then((players) => {
+      findMatchPlayers(players, obj);
       rules.setVictoryPoints(obj);
       rules.setPointsWithCoef(obj, players);
-    }).then(() => {
-      return dbClient.connect(DB_CONNECTION_STRING)
-    }).then((db) => {
+      
       let collection = db.collection('players');
       collection.updateOne(
         { name: obj.name1 },
@@ -39,13 +42,10 @@ const addScore = function (obj) {
         { $inc: { matches: 1, points: obj.points2 } },
         { upsert: false }
       );
-      db.close();
       return 1;
     }).catch(function (error) {
       throw error;
     });
-
-  return promise;
 }
 
 function findMatchPlayers(players, matchObj) {
@@ -60,4 +60,9 @@ function findMatchPlayers(players, matchObj) {
   return [player1, player2];
 }
 
-module.exports = { getPlayers, addScore };
+process.on('SIGINT', function () {
+  db.close();
+  process.exit();
+});
+
+module.exports = { init, getPlayers, addScore };

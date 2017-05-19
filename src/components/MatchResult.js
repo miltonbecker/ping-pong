@@ -11,7 +11,7 @@ class MatchResult extends Component {
           <h3>Inform a match's result</h3>
           <form id='comment-form' onSubmit={(event) => {
             event.preventDefault();
-            this.submitCb();
+            this.submitCb(this.name1, this.name2, this.score1, this.score2);
           }}>
 
             <table className="table table-bordered">
@@ -59,11 +59,11 @@ class MatchResult extends Component {
     );
   }
 
-  submitCb() {
-    const name1 = this.name1.value.trim();
-    const name2 = this.name2.value.trim();
-    const score1 = parseInt(this.score1.value.trim());
-    const score2 = parseInt(this.score2.value.trim());
+  submitCb(inputName1, inputName2, inputScore1, inputScore2) {
+    const name1 = inputName1.value.trim();
+    const name2 = inputName2.value.trim();
+    const score1 = parseInt(inputScore1.value.trim());
+    const score2 = parseInt(inputScore2.value.trim());
 
     if (!name1 || !name2) {
       alert('Please, make sure you\'ve fulfilled all the fields.');
@@ -75,22 +75,22 @@ class MatchResult extends Component {
       return;
     }
 
-    this.props.dispatch(addScore({ name1, name2, score1, score2 }));
+    this.props.sendResult({ name1, name2, score1, score2 });
 
-    this.clearFields();
+    this.clearFields(inputName1, inputName2, inputScore1, inputScore2);
   }
 
-  clearFields() {
-    this.name1.value = '';
-    this.name2.value = '';
-    this.score1.value = '';
-    this.score2.value = '';
+  clearFields(inputName1, inputName2, inputScore1, inputScore2) {
+    inputName1.value = '';
+    inputName2.value = '';
+    inputScore1.value = '';
+    inputScore2.value = '';
 
     //placeholder fix
-    this.score2.focus();
-    this.score1.focus();
-    this.name2.focus();
-    this.name1.focus();
+    inputScore2.focus();
+    inputScore1.focus();
+    inputName2.focus();
+    inputName1.focus();
   }
 }
 
@@ -101,4 +101,12 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(MatchResult);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sendResult: (obj) => {
+      dispatch(addScore(obj));
+    }
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MatchResult);

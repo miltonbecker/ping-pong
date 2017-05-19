@@ -30,6 +30,8 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(require('webpack-hot-middleware')(compiler));
 }
 
+db.init();
+
 app.get('/api/getPlayers', function (req, res) {
   db.getPlayers()
     .then(function (result) {
