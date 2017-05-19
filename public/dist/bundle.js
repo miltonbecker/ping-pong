@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 217);
+/******/ 	return __webpack_require__(__webpack_require__.s = 216);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10323,7 +10323,7 @@ var MatchResult = function (_Component) {
             'form',
             { id: 'comment-form', onSubmit: function onSubmit(event) {
                 event.preventDefault();
-                _this2.submitCb(_this2.name1, _this2.name2, _this2.score1, _this2.score2);
+                _this2.submitCb();
               } },
             _react2.default.createElement(
               'table',
@@ -10373,14 +10373,14 @@ var MatchResult = function (_Component) {
                   _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score (default 0)', className: 'form-control', ref: function ref(node) {
+                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
                         _this2.score1 = node;
                       } })
                   ),
                   _react2.default.createElement(
                     'td',
                     null,
-                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score (default 0)', className: 'form-control', ref: function ref(node) {
+                    _react2.default.createElement('input', { type: 'text', placeholder: 'Score', className: 'form-control', ref: function ref(node) {
                         _this2.score2 = node;
                       } })
                   )
@@ -10408,11 +10408,11 @@ var MatchResult = function (_Component) {
     }
   }, {
     key: 'submitCb',
-    value: function submitCb(inputName1, inputName2, inputScore1, inputScore2) {
-      var name1 = inputName1.value.trim();
-      var name2 = inputName2.value.trim();
-      var score1 = parseInt(inputScore1.value.trim()) || 0;
-      var score2 = parseInt(inputScore2.value.trim()) || 0;
+    value: function submitCb() {
+      var name1 = this.name1.value.trim();
+      var name2 = this.name2.value.trim();
+      var score1 = parseInt(this.score1.value.trim());
+      var score2 = parseInt(this.score2.value.trim());
 
       if (!name1 || !name2) {
         alert('Please, make sure you\'ve fulfilled all the fields.');
@@ -10426,21 +10426,21 @@ var MatchResult = function (_Component) {
 
       this.props.dispatch((0, _actions.addScore)({ name1: name1, name2: name2, score1: score1, score2: score2 }));
 
-      this.clearFields(inputName1, inputName2, inputScore1, inputScore2);
+      this.clearFields();
     }
   }, {
     key: 'clearFields',
-    value: function clearFields(inputName1, inputName2, inputScore1, inputScore2) {
-      inputName1.value = '';
-      inputName2.value = '';
-      inputScore1.value = '';
-      inputScore2.value = '';
+    value: function clearFields() {
+      this.name1.value = '';
+      this.name2.value = '';
+      this.score1.value = '';
+      this.score2.value = '';
 
       //placeholder fix
-      inputScore2.focus();
-      inputScore1.focus();
-      inputName2.focus();
-      inputName1.focus();
+      this.score2.focus();
+      this.score1.focus();
+      this.name2.focus();
+      this.name1.focus();
     }
   }]);
 
@@ -10477,8 +10477,6 @@ var _actions = __webpack_require__(29);
 
 var _reactRedux = __webpack_require__(48);
 
-var _sharedRules = __webpack_require__(216);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10502,8 +10500,6 @@ var PlayersRanking = function (_Component) {
       var players = this.props.players;
       var fetchingPlayersError = this.props.fetchingPlayersError;
 
-      if (players && players.length > 0) (0, _sharedRules.setRankingAndCoef)(players);
-
       return _react2.default.createElement(
         'div',
         { className: 'row' },
@@ -10526,83 +10522,85 @@ var PlayersRanking = function (_Component) {
             'Oops sorry, there was an error fetching the ranking.'
           ),
           players && players.length && _react2.default.createElement(
-            'div',
-            { className: 'row' },
+            'table',
+            { className: 'table table-bordered table-hover' },
             _react2.default.createElement(
-              'div',
-              { className: 'col-xs-12' },
+              'thead',
+              null,
               _react2.default.createElement(
-                'table',
-                { className: 'table table-bordered table-hover' },
+                'tr',
+                { className: 'info' },
                 _react2.default.createElement(
-                  'thead',
+                  'th',
                   null,
-                  _react2.default.createElement(
-                    'tr',
-                    { className: 'info' },
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Ranking'
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Name'
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Points'
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Matches'
-                    ),
-                    _react2.default.createElement(
-                      'th',
-                      null,
-                      'Points/Matches'
-                    )
-                  )
+                  'Ranking'
                 ),
                 _react2.default.createElement(
-                  'tbody',
+                  'th',
                   null,
-                  players.map(function (player) {
-                    return _react2.default.createElement(
-                      'tr',
-                      { key: player._id },
-                      _react2.default.createElement(
-                        'th',
-                        null,
-                        player.ranking
-                      ),
-                      _react2.default.createElement(
-                        'td',
-                        null,
-                        player.name
-                      ),
-                      _react2.default.createElement(
-                        'td',
-                        null,
-                        player.points
-                      ),
-                      _react2.default.createElement(
-                        'td',
-                        null,
-                        player.matches
-                      ),
-                      _react2.default.createElement(
-                        'td',
-                        null,
-                        (player.points / player.matches).toFixed(2)
-                      )
-                    );
-                  })
+                  'Name'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Points'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Matches'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Points/Matches'
+                ),
+                _react2.default.createElement(
+                  'th',
+                  null,
+                  'Coef'
                 )
               )
+            ),
+            _react2.default.createElement(
+              'tbody',
+              null,
+              players.map(function (player) {
+                return _react2.default.createElement(
+                  'tr',
+                  { key: player._id },
+                  _react2.default.createElement(
+                    'th',
+                    null,
+                    player.ranking
+                  ),
+                  _react2.default.createElement(
+                    'td',
+                    null,
+                    player.name
+                  ),
+                  _react2.default.createElement(
+                    'td',
+                    null,
+                    player.points
+                  ),
+                  _react2.default.createElement(
+                    'td',
+                    null,
+                    player.matches
+                  ),
+                  _react2.default.createElement(
+                    'td',
+                    null,
+                    (player.points / player.matches).toFixed(2)
+                  ),
+                  _react2.default.createElement(
+                    'td',
+                    null,
+                    player.coef
+                  )
+                );
+              })
             )
           )
         )
@@ -23627,28 +23625,6 @@ module.exports = function(module) {
 
 /***/ }),
 /* 216 */
-/***/ (function(module, exports) {
-
-exports.setRankingAndCoef = function (players) {
-  let ranking = 1;
-  let curPoints = players[0].points;
-
-  for (player of players) {
-    if (player.points < curPoints) {
-      ranking++;
-      curPoints = player.points;
-    }
-    player.ranking = ranking;
-    player.coef = 3 - ((ranking - 1) * 0.3);
-
-    if (player.coef < 0.3)
-      player.coef = 0.3;
-  }
-}
-
-
-/***/ }),
-/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(92);

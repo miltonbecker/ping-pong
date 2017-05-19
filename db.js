@@ -1,5 +1,4 @@
-const publicRules = require('./rules/shared-rules');
-const privateRules = require('./rules/backend-rules');
+const rules = require('./game-rules');
 const dbClient = require('mongodb');
 
 const DB_CONNECTION_STRING = 'mongodb://localhost:27017/test';
@@ -11,6 +10,7 @@ const getPlayers = () => {
       db.close();
       return docs;
     }).then(function (docs) {
+      rules.setRankingAndCoef(docs);
       return docs;
     }).catch(function (error) {
       throw error;
@@ -19,23 +19,12 @@ const getPlayers = () => {
 }
 
 const addScore = function (obj) {
-  privateRules.setVictoryPoints(obj);
-
   let promise = getPlayers()
     .then((players) => {
-      publicRules.setRankingAndCoef(players);
-
-      let player1 = players.find(function (player) {
-        return player.name == obj.name1;
-      });
-
-      let player2 = players.find(function (player) {
-        return player.name == obj.name2;
-      });
-
-      return [player1, player2];
+      return findMatchPlayers(players, obj);
     }).then((players) => {
-      privateRules.setPointsWithCoef(obj, players);
+      rules.setVictoryPoints(obj);
+      rules.setPointsWithCoef(obj, players);
     }).then(() => {
       return dbClient.connect(DB_CONNECTION_STRING)
     }).then((db) => {
@@ -57,6 +46,18 @@ const addScore = function (obj) {
     });
 
   return promise;
+}
+
+function findMatchPlayers(players, matchObj) {
+  let player1 = players.find(function (player) {
+    return player.name == matchObj.name1;
+  });
+
+  let player2 = players.find(function (player) {
+    return player.name == matchObj.name2;
+  });
+
+  return [player1, player2];
 }
 
 module.exports = { getPlayers, addScore };

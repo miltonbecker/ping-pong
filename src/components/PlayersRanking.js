@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { fetchPlayers } from '../redux/actions';
 import { connect } from 'react-redux';
-import { setRankingAndCoef } from '../../rules/shared-rules';
 
 class PlayersRanking extends Component {
 
   render() {
     const players = this.props.players;
     const fetchingPlayersError = this.props.fetchingPlayersError;
-
-    if (players && players.length > 0)
-      setRankingAndCoef(players);
 
     return (
       <div className='row'>
@@ -27,32 +23,30 @@ class PlayersRanking extends Component {
           }
 
           {players && players.length &&
-            <div className='row'>
-              <div className='col-xs-12'>
-                <table className="table table-bordered table-hover">
-                  <thead>
-                    <tr className="info">
-                      <th>Ranking</th>
-                      <th>Name</th>
-                      <th>Points</th>
-                      <th>Matches</th>
-                      <th>Points/Matches</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {players.map((player) => (
-                      <tr key={player._id}>
-                        <th>{player.ranking}</th>
-                        <td>{player.name}</td>
-                        <td>{player.points}</td>
-                        <td>{player.matches}</td>
-                        <td>{(player.points / player.matches).toFixed(2)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <table className="table table-bordered table-hover">
+              <thead>
+                <tr className="info">
+                  <th>Ranking</th>
+                  <th>Name</th>
+                  <th>Points</th>
+                  <th>Matches</th>
+                  <th>Points/Matches</th>
+                  <th>Coef</th>
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player) => (
+                  <tr key={player._id}>
+                    <th>{player.ranking}</th>
+                    <td>{player.name}</td>
+                    <td>{player.points}</td>
+                    <td>{player.matches}</td>
+                    <td>{(player.points / player.matches).toFixed(2)}</td>
+                    <td>{player.coef}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           }
         </div>
       </div>

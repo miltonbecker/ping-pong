@@ -11,7 +11,7 @@ class MatchResult extends Component {
           <h3>Inform a match's result</h3>
           <form id='comment-form' onSubmit={(event) => {
             event.preventDefault();
-            this.submitCb(this.name1, this.name2, this.score1, this.score2);
+            this.submitCb();
           }}>
 
             <table className="table table-bordered">
@@ -32,10 +32,10 @@ class MatchResult extends Component {
                 </tr>
                 <tr>
                   <td>
-                    <input type='text' placeholder='Score (default 0)' className='form-control' ref={(node) => { this.score1 = node }} />
+                    <input type='number' placeholder='Score' className='form-control' ref={(node) => { this.score1 = node }} />
                   </td>
                   <td>
-                    <input type='text' placeholder='Score (default 0)' className='form-control' ref={(node) => { this.score2 = node }} />
+                    <input type='number' placeholder='Score' className='form-control' ref={(node) => { this.score2 = node }} />
                   </td>
                 </tr>
               </tbody>
@@ -59,11 +59,11 @@ class MatchResult extends Component {
     );
   }
 
-  submitCb(inputName1, inputName2, inputScore1, inputScore2) {
-    const name1 = inputName1.value.trim();
-    const name2 = inputName2.value.trim();
-    const score1 = parseInt(inputScore1.value.trim()) || 0;
-    const score2 = parseInt(inputScore2.value.trim()) || 0;
+  submitCb() {
+    const name1 = this.name1.value.trim();
+    const name2 = this.name2.value.trim();
+    const score1 = parseInt(this.score1.value.trim());
+    const score2 = parseInt(this.score2.value.trim());
 
     if (!name1 || !name2) {
       alert('Please, make sure you\'ve fulfilled all the fields.');
@@ -77,20 +77,20 @@ class MatchResult extends Component {
 
     this.props.dispatch(addScore({ name1, name2, score1, score2 }));
 
-    this.clearFields(inputName1, inputName2, inputScore1, inputScore2);
+    this.clearFields();
   }
 
-  clearFields(inputName1, inputName2, inputScore1, inputScore2) {
-    inputName1.value = '';
-    inputName2.value = '';
-    inputScore1.value = '';
-    inputScore2.value = '';
+  clearFields() {
+    this.name1.value = '';
+    this.name2.value = '';
+    this.score1.value = '';
+    this.score2.value = '';
 
     //placeholder fix
-    inputScore2.focus();
-    inputScore1.focus();
-    inputName2.focus();
-    inputName1.focus();
+    this.score2.focus();
+    this.score1.focus();
+    this.name2.focus();
+    this.name1.focus();
   }
 }
 
