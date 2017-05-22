@@ -27,9 +27,9 @@ const getPlayers = () => {
 const addScore = function (obj) {
   return getPlayers()
     .then((players) => {
-      findMatchPlayers(players, obj);
+      const matchPlayers = findMatchPlayers(players, obj);
       rules.setVictoryPoints(obj);
-      rules.setPointsWithCoef(obj, players);
+      rules.setPointsWithCoef(obj, matchPlayers);
       
       let collection = db.collection('players');
       collection.updateOne(
